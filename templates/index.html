@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style type="text/css">
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+</head>
+<body>
+<h1>Hello world!</h1>
+<p>This is an experimental web application.</p>
+<h2>Apps</h2>
+<p>This web application knows about the following backend applications.</p>
+<table>
+  <tr>
+    <th>App</th>
+    <th>Env</th>
+    <th>Version</th>
+  </tr>
+  {% for app in apps: %}
+  <tr>
+      <td>{{ app["app"] }}</td>
+      <td>{{ app["env"] }}</td>
+      <td>{{ app["version"] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+</body>
+</html>
