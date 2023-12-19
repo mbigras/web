@@ -1,30 +1,43 @@
 # Web
 
-> Web is a test web application for experimenting with application delivery workflows.
+> App web is for experimenting with application delivery workflows.
 
-## Overview
+## Summary
 
 This app is for experimenting with application delivery workflows.
 
 ## Getting started
 
-The following procedure describes how to build and run Web.
+The following procedure describes how to build and run web app.
 
 1. Get the code.
 
    ```
-   git clone ...
+   git clone git@github.com:mbigras/web.git
    cd web
    ```
 
-1. Start web and app1, app2, and app3.
+1. Build container.
 
    ```
-   docker-compose up
+   docker build -t web .
+   ```
+
+1. Run container.
+
+   ```
+   docker run -it -p 8080:8080 web
    ```
 
 1. Navigate to http://localhost:8080/ in your browser.
 
-1. Back in your terminal, stop all apps.
+1. To stop all apps, navigate back to your terminal and press Ctrl-C.
 
-   Press Ctrl-C
+   Your output should look like the following:
+
+   ```
+   $ docker run -it -p 8080:8080 web
+   2023/12/19 20:09:44 running as pid 1
+   2023/12/19 20:09:44 listening on port 8080
+   ^C2023/12/19 20:09:55 caught signal: interrupt; shutting down; byeee!!
+   ```

@@ -1,12 +1,9 @@
-FROM python:3.10.6
+FROM golang:1.21.5-bookworm AS builder
+WORKDIR /code
+COPY web.go ./
+ENV CGO_ENABLED=0
+RUN go build -o web web.go
 
-WORKDIR /app
-
-COPY requirements.txt ./
-
-RUN pip install -r requirements.txt
-
-COPY app.py entrypoint.sh ./
-COPY templates ./templates/
-
-ENTRYPOINT ["/app/entrypoint.sh"]
+FROM debian:11
+COPY --from=builder /code/web /usr/local/bin/web
+ENTRYPOINT ["/usr/local/bin/web"]
