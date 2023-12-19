@@ -1,0 +1,36 @@
+name: build-and-push
+
+on:
+- push
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+
+    - name: build
+      run: |
+        tag=$(git rev-parse HEAD)
+        docker build --tag=mbigras/web:$tag .
+        docker tag mbigras/web:$tag mbigras/web:latest
+
+    - name: test
+      run: |
+        docker rm -f web &>/dev/null
+        docker run -d --name=web mbigras/web:latest
+        docker stop web
+        test $(docker inspect web | jq '.[0].State.ExitCode') -eq 0
+
+    - name: login
+      run: echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
+      env:
+        DOCKERHUB_USERNAME: mbigras
+        DOCKERHUB_TOKEN: "${{ secrets.DOCKERHUB_TOKEN }}"
+
+    - name: push
+      run: |
+        tag=$(git rev-parse HEAD)
+        docker push mbigras/web:$tag
+        docker push mbigras/web:latest
